@@ -173,17 +173,17 @@ def get_usuarios_x_area(
         .all()
     )
 
-    return usuarios
-# @router.get("/usuarios_area")
-# def get_usuarios_x_area(
-#     id_area: int = Query(..., description= "ID area para filtrar usuarios"),
-#     db: Session = Depends(get_db_avsf),
-#     ):
-#     usuarios= (
-#         db.query(Usuarios)
-#         .filter(Usuarios.id_area == id_area)
-#         .order_by(Usuarios.nombres.asc())
-#         .all()
-#     )
+    return [
+        {
+            "id_usuario": u.id_usuario,
 
-#     return usuarios
+            "nombre_completo": " ".join(
+                parte.strip()
+                for parte in [u.nombres, u.paterno, u.materno]
+                if parte and parte.strip()
+            ),
+            "id_area": u.id_area,
+        }
+        for u in usuarios
+    ]
+
