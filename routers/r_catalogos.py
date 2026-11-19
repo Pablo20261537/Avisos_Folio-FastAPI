@@ -110,6 +110,23 @@ def get_aduanas(
 
     return aduanas
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+@router.get("/aduanas_x_tipo/{id_tipo_aduana}")
+def get_aduanas(
+    id_tipo_aduana,
+    db:Session = Depends(get_db_avsf),
+):
+
+    aduanas = (
+        db.query(Aduanas)
+        .filter(Aduanas.id_tipo_aduana == id_tipo_aduana)
+        .order_by(Aduanas.nombre_corto.asc())
+        .all())
+
+    return aduanas
+
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @router.get("/eventos")
 def get_eventos(
     db:Session = Depends(get_db_avsf),
@@ -174,16 +191,31 @@ def get_usuarios_x_area(
     )
 
     return usuarios
-# @router.get("/usuarios_area")
-# def get_usuarios_x_area(
-#     id_area: int = Query(..., description= "ID area para filtrar usuarios"),
-#     db: Session = Depends(get_db_avsf),
-#     ):
-#     usuarios= (
-#         db.query(Usuarios)
-#         .filter(Usuarios.id_area == id_area)
-#         .order_by(Usuarios.nombres.asc())
-#         .all()
-#     )
 
-#     return usuarios
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+@router.get("/alertas_aduana/{clave_aduana_3}")
+def get_alertas_x_aduana(
+    clave_aduana_3: str,
+    db: Session = Depends(get_db_avsf),
+):
+    rows = (
+        db.query(
+            Aduana_Tipo_Alerta.id_relacion,
+            Tipo_Alerta.tipo_alerta
+        ).join(
+            Tipo_Alerta,
+            Aduana_Tipo_Alerta.id_tipo_alerta == Tipo_Alerta.id_tipo_alerta,
+        ).filter(
+            Aduana_Tipo_Alerta.clave_aduana_3 == clave_aduana_3,
+        )
+        .order_by(Tipo_Alerta.tipo_alerta.asc())
+        .all() 
+    )
+
+    return [
+        {
+            "id_relacion": r.id_relacion,
+            "tipo_alerta": r.tipo_alerta
+        }
+        for r in rows
+    ]

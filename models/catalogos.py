@@ -119,6 +119,10 @@ class Aduanas(Base):
           nullable=False
      )
 
+     id_tipo_aduana = Column(
+        Integer,  
+     )
+
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 class Eventos(Base):
      __tablename__ = "avsf_cat_eventos"
@@ -142,6 +146,10 @@ class Aduana_Tipo_Alerta(Base):
           Integer,
           primary_key=True,
           index=True
+     )
+
+     clave_aduana_3 = Column(
+          String(3)
      )
 
      id_tipo_alerta = Column(
