@@ -190,7 +190,20 @@ def get_usuarios_x_area(
         .all()
     )
 
-    return usuarios
+    return [
+        {
+            "id_usuario": u.id_usuario,
+
+            "nombre_completo": " ".join(
+                parte.strip()
+                for parte in [u.nombres, u.paterno, u.materno]
+                if parte and parte.strip()
+            ),
+            "id_area": u.id_area,
+        }
+        for u in usuarios
+    ]
+
 
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @router.get("/alertas_aduana/{clave_aduana_3}")
@@ -219,3 +232,4 @@ def get_alertas_x_aduana(
         }
         for r in rows
     ]
+   

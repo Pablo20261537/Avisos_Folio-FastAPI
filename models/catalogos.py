@@ -199,6 +199,15 @@ class Usuarios(Base):
         String(100)
     )
 
+    paterno = Column(
+        String(100)
+    )
+ 
+    materno = Column(
+        String(100)
+    )
+    
+  
     id_area = Column(
         Integer
     )
